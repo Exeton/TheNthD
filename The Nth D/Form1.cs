@@ -22,12 +22,14 @@ namespace The_Nth_D
 
 		private void Form1_Load(object sender, EventArgs e)
 		{
+			DoubleBuffered = true;
+
 			Bitmap playerSprite;
 			//playerSprite = new Bitmap(Bitmap.FromFile(@""));
 			playerSprite = createBox(100, 100, Color.Black);
 
 			player = new Player(playerSprite, 100, 600);
-			keyManager = new KeysManager(player);
+			keyManager = new KeysManager(player);			
 
 			Timer gameLoop = new Timer();
 			gameLoop.Interval = 10;
@@ -38,24 +40,10 @@ namespace The_Nth_D
 
 		private void GameLoop_Tick(object sender, EventArgs e)
 		{
-			draw();
+			Invalidate();
 			keyManager.handelInput();
 			player.handelPhysics();
 		}
-
-		private void draw()
-		{
-			Graphics screenGraphics = this.CreateGraphics();
-
-			Bitmap buffer = new Bitmap(Width, Height);
-			Graphics bufferGrpahics = Graphics.FromImage(buffer);
-
-			bufferGrpahics.Clear(Color.White);
-			bufferGrpahics.DrawImage(player.sprite, player.x, player.y);
-
-			screenGraphics.DrawImage(buffer, 0, 0);
-		}
-
 
 		//Method Source https://stackoverflow.com/questions/1720160/how-do-i-fill-a-bitmap-with-a-solid-color
 		private Bitmap createBox(int width, int height, Color color)
@@ -97,6 +85,14 @@ namespace The_Nth_D
 					keyManager.keys[3] = value;
 					break;
 			}
+		}
+
+		private void Form1_Paint(object sender, PaintEventArgs e)
+		{
+			Graphics graphics = e.Graphics;
+
+			graphics.Clear(Color.White);
+			graphics.DrawImage(player.sprite, player.x, player.y);
 		}
 	}
 }
