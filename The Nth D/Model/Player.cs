@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using The_Nth_D.Model;
@@ -39,64 +40,53 @@ namespace The_Nth_D
 
 		public void handelPhysics(Block[,] map)
 		{
-
-
 			velocityY += 2;
 
 			if (velocityY > 10)
 				velocityY = 10;
 
-			if (velocityX > 0)
-				velocityX--;
-			if (velocityX < 0)
-				velocityX++;
-
-			if (velocityY > 0)
-				velocityY--;
-			if (velocityY < 0)
-				velocityY++;
-
-			applyXVelocity(velocityX, map);
-			applyYVelocity(velocityY, map);
+			handelPhysics(ref velocityX, 0, map);
+			handelPhysics(ref velocityY, 1, map);
 		}
 
-		public void applyXVelocity(int velocity, Block[,] map)
+		public void handelPhysics(ref int velocity, int dimension, Block[,] map)
 		{
-			int hitboxX = (int)x;
+
 			if (velocity > 0)
-			{
-				hitboxX += sprite.Width;
-			}
+				velocity--;
+			if (velocity < 0)
+				velocity++;
 
-			for (int i = 0; i < sprite.Height / 10; i++)
-			{
-				int blockX = (int)(hitboxX / 10);
-				int blockY = (int)(y / 10 + i);
+			if (velocity == 0)//Yes, this must go after friction calculations
+				return;
 
-				if (map[blockX, blockY].filled == true)
+			int spriteSizeOnAxis = getSize(dimension);
+
+			Vector2 velocityVec = Form1.velocityAndDimensionToVector(1, dimension, velocity);//If Velocity is passed in instead of 1, if velocity is negative, it'll get canceled out
+			Vector2 positionVec = new Vector2(x, y);
+			Vector2 spriteOffsetVec = Form1.velocityAndDimensionToVector(velocity, dimension, spriteSizeOnAxis);
+			Vector2 perpVector = 10 * Vector2.Normalize(Form1.positivePerpindicularVector(velocityVec));
+
+			positionVec +=velocityVec;//Prevent clipping issues
+
+			if (velocity > 0)
+				positionVec += spriteOffsetVec;
+			
+			for (int i = 0; i < spriteSizeOnAxis / 10; i++)
+			{
+				if (map[(int)positionVec.X / 10, (int)positionVec.Y / 10].filled == true)
 					return;
+
+				positionVec += perpVector;
 			}
-			x += velocity;
+
+			addVelocityVector(velocityVec);
 		}
 
-
-		public void applyYVelocity(int velocity, Block[,] map)
+		public void addVelocityVector(Vector2 vector)
 		{
-			int hitboxY = (int)y;
-			if (velocity > 0)
-			{
-				hitboxY += sprite.Height;
-			}
-
-			for (int i = 0; i < sprite.Width / 10; i++)
-			{
-				int blockX = (int)(x / 10 + i);
-				int blockY = (int)(hitboxY / 10);
-
-				if (map[blockX, blockY].filled == true)
-					return;
-			}
-			y += velocity;
+			x += vector.X;
+			y += vector.Y;
 		}
 
 		public override void onTick(Block[,] map)

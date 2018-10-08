@@ -27,6 +27,15 @@ namespace The_Nth_D.Model
 			g.DrawImage(sprite, x, y);
 		}
 
+		public virtual int getSize(int dimension)
+		{
+			if (dimension == 0)
+				return sprite.Width;
+			if (dimension == 1)
+				return sprite.Height;
+			throw new Exception("Invalid dimension");
+		}
+
 		//public virtual void Draw(Graphics g)
 		//{
 		//	g.DrawImage(sprite, (int)x, (int)y);

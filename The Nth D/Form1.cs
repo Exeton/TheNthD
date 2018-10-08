@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -23,6 +24,48 @@ namespace The_Nth_D
 		public Form1()
 		{
 			InitializeComponent();
+		}
+
+		public static Vector2 positivePerpindicularVector(Vector2 vector2)
+		{
+			return Vector2.Abs(new Vector2(vector2.Y, vector2.X));
+		}
+
+
+		public static Vector2 velocityAndDimensionToVector(int velocity, int dimension, int val)
+		{
+			if (velocity < 0)
+				val *= -1;
+
+			if (dimension == 0)
+				return new Vector2(val, 0);
+			if (dimension == 1)
+				return new Vector2(0, val);
+
+			throw new Exception("Invalid dimension");
+		}
+
+		public static Vector2 velocityAndDimensionToUnitVector(int velocity, int dimension)
+		{
+			return velocityAndDimensionToVector(velocity, dimension, 1);
+		}
+
+
+		public static Vector2 getUnitUp()
+		{
+			return new Vector2(0, -1);
+		}
+		public static Vector2 getUnitDown()
+		{
+			return new Vector2(0, 1);
+		}
+		public static Vector2 getUnitLeft()
+		{
+			return new Vector2(-1, 0);
+		}
+		public static Vector2 getUnitRight()
+		{
+			return new Vector2(1, 0);
 		}
 
 		private void Form1_Load(object sender, EventArgs e)
@@ -57,9 +100,9 @@ namespace The_Nth_D
 			for (int i = 0; i < 200; i++)
 				for (int j = 0; j < 50; j++)
 				{
-					bool fill = false;
-					if (i > 100)
-						fill = true;
+					bool fill = (i > 100) || (j < 2) || i < 2;
+
+
 
 					map[i, j] = new Block(fill, p);
 					map[i, j + 50] = new Block(true, p);
