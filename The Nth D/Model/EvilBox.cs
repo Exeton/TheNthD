@@ -62,11 +62,19 @@ namespace The_Nth_D.Model
 
 		private float calculateSpeed()
 		{
-			if (!dynamicSpeed)
-				return baseSpeed;
 
 			float dx = target.x - x;
 			float dy = target.y - y;
+
+			if (Math.Abs(dx) + Math.Abs(dy) < 20)
+				return 0;
+
+
+			if (!dynamicSpeed)
+				return baseSpeed;
+
+
+
 
 			int expectedDistance = 100;
 			float distApprox = Math.Abs(dx) + Math.Abs(dy) - expectedDistance;
