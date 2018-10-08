@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using The_Nth_D.Controller;
+using The_Nth_D.Model;
 
 namespace The_Nth_D
 {
@@ -15,6 +16,7 @@ namespace The_Nth_D
 	{
 		KeysManager keyManager;
 		Player player;
+		List<Entity> entities = new List<Entity>();
 		public Form1()
 		{
 			InitializeComponent();
@@ -27,9 +29,20 @@ namespace The_Nth_D
 			Bitmap playerSprite;
 			//playerSprite = new Bitmap(Bitmap.FromFile(@""));
 			playerSprite = createBox(100, 100, Color.Black);
-
 			player = new Player(playerSprite, 100, 600);
-			keyManager = new KeysManager(player);			
+			entities.Add(player);
+
+			keyManager = new KeysManager(player);
+
+			Random r = new Random();
+			Bitmap evilBoxBitmap = createBox(100, 100, Color.Red);
+
+			for (int i = 1; i < 6; i++)
+			{
+				EvilBox evilBox = new EvilBox(evilBoxBitmap, 100, 100, player, i);
+				entities.Add(evilBox);
+			}
+
 
 			Timer gameLoop = new Timer();
 			gameLoop.Interval = 10;
@@ -42,7 +55,11 @@ namespace The_Nth_D
 		{
 			Invalidate();
 			keyManager.handelInput();
-			player.handelPhysics();
+
+			foreach (Entity entity in entities)
+			{
+				entity.onTick();
+			}
 		}
 
 		//Method Source https://stackoverflow.com/questions/1720160/how-do-i-fill-a-bitmap-with-a-solid-color
@@ -92,7 +109,12 @@ namespace The_Nth_D
 			Graphics graphics = e.Graphics;
 
 			graphics.Clear(Color.White);
-			graphics.DrawImage(player.sprite, player.x, player.y);
+
+			foreach (Entity entity in entities)
+			{
+				entity.Draw(graphics);
+			}
+
 		}
 	}
 }

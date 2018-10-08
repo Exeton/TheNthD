@@ -4,29 +4,20 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using The_Nth_D.Model;
 
 namespace The_Nth_D
 {
-	class Player : I2DMovementController
+	class Player : Entity, I2DMovementController
 	{
-		public Bitmap sprite;
-		int health;
-
-		public int x;
-		public int y;
-
 		int velocityX;
 		int velocityY;
 		
 		int movementSpeed = 10;
 
-		public Player(Bitmap sprite, int x, int y)
+		public Player(Bitmap sprite, int x, int y) : base(sprite, x, y)
 		{
-			this.sprite = sprite;
-			this.x = x;
-			this.y = y;
 		}
-
 
 		public void handelLeftInput()
 		{
@@ -58,10 +49,14 @@ namespace The_Nth_D
 			if (velocityY < 0)
 				velocityY++;
 
+
 			x += velocityX;
 			y -= velocityY; //Changes down to negative and up to positive
 		}
 
-		
+		public override void onTick()
+		{
+			handelPhysics();
+		}
 	}
 }
