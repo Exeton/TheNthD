@@ -98,6 +98,6 @@ namespace The_Nth_D.Model
 		//	g.DrawImage(sprite, (int)x, (int)y);
 		//}
 
-		public abstract void onTick(Block[,] map);
+		public abstract void onTick(Map map);
 	}
 }

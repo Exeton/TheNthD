@@ -19,7 +19,7 @@ namespace The_Nth_D
 		Player player;
 		List<Entity> entities = new List<Entity>();
 
-		Block[,] map = new Block[200,100];
+		Map map = new Map(200, 100);
 
 		public Form1()
 		{
@@ -101,14 +101,13 @@ namespace The_Nth_D
 
 			Brush p = Brushes.Brown;
 			for (int i = 0; i < 200; i++)
-				for (int j = 0; j < 50; j++)
+				for (int j = 0; j < 100; j++)
 				{
-					bool fill = (i > 100) || (j < 2) || i < 2;
+					bool fill = (i > 165) || (j < 2) || i < 2 || j > 90;
 
 
 
 					map[i, j] = new Block(fill, p);
-					map[i, j + 50] = new Block(true, p);
 				}
 
 
@@ -122,6 +121,16 @@ namespace The_Nth_D
 
 		private void GameLoop_Tick(object sender, EventArgs e)
 		{
+
+			if (MouseButtons == MouseButtons.Left)
+			{
+				int x = Cursor.Position.X / 10;
+				int y = (Cursor.Position.Y - 18) / 10;
+
+				map[x,y].filled = true;
+				map[x, y].color = Brushes.Pink;
+			}
+
 			Invalidate();
 			keyManager.handelInput();
 

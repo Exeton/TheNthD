@@ -87,7 +87,7 @@ namespace The_Nth_D.Model
 			}			
 		}
 
-		public override void onTick(Block[,] map)
+		public override void onTick(Map map)
 		{
 			Move();
 		}

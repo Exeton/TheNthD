@@ -38,7 +38,7 @@ namespace The_Nth_D
 			velocityY = movementSpeed; 
 		}
 
-		public void handelPhysics(Block[,] map)
+		public void handelPhysics(Map map)
 		{
 			velocityY += 2;
 
@@ -49,7 +49,7 @@ namespace The_Nth_D
 			handelPhysics(ref velocityY, 1, map);
 		}
 
-		public void handelPhysics(ref int velocity, int dimension, Block[,] map)
+		public void handelPhysics(ref int velocity, int dimension, Map map)
 		{
 
 			if (velocity > 0)
@@ -110,7 +110,7 @@ namespace The_Nth_D
 			y += vector.Y;
 		}
 
-		public override void onTick(Block[,] map)
+		public override void onTick(Map map)
 		{
 			handelPhysics(map);
 		}
