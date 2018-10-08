@@ -35,7 +35,7 @@ namespace The_Nth_D
 			keyManager = new KeysManager(player);
 
 			Random r = new Random();
-			Bitmap evilBoxBitmap = createBox(100, 100, Color.Red);
+			Bitmap evilBoxBitmap = createBox(75, 75, Color.Red);
 
 			for (int i = 1; i < 6; i++)
 			{

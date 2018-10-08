@@ -12,8 +12,8 @@ namespace The_Nth_D.Model
 		public Bitmap sprite;
 		int health;
 
-		public int x;
-		public int y;
+		public float x;
+		public float y;
 
 		public Entity(Bitmap sprite, int x, int y)
 		{
