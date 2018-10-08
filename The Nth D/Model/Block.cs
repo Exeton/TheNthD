@@ -9,6 +9,8 @@ namespace The_Nth_D.Model
 {
 	class Block
 	{
+		public static int blockSize = 10;
+
 		public bool filled;
 		public Brush color;
 

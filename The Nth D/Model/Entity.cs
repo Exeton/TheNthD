@@ -27,6 +27,25 @@ namespace The_Nth_D.Model
 			g.DrawImage(sprite, x, y);
 		}
 
+		public float getOutsideEdge(int dimension)
+		{
+			if (dimension == 0)
+				return getRight();
+			if (dimension == 1)
+				return getBottom();
+			throw new Exception("Invalid dimension");
+		}
+
+		public float getBottom()
+		{
+			return y + sprite.Height - 1;
+		}
+
+		public float getRight()
+		{
+			return x + sprite.Width - 1;
+		}
+
 		public virtual int getSize(int dimension)
 		{
 			if (dimension == 0)
@@ -34,6 +53,44 @@ namespace The_Nth_D.Model
 			if (dimension == 1)
 				return sprite.Height;
 			throw new Exception("Invalid dimension");
+		}
+
+		public float getPos(int dimension)
+		{
+			if (dimension == 0)
+				return x;
+			if (dimension == 1)
+				return y;
+			throw new Exception("Invalid dimension");
+		}
+
+		public float getEdge(float velocity, int dimension)
+		{
+			if (velocity < 0)
+				return getPos(dimension);
+			else
+				return getOutsideEdge(dimension);
+		}
+
+
+		public void setPos(int value, int dimension)
+		{
+			if (dimension == 0)
+				x = value;
+			else if (dimension == 1)
+				y = value;
+			else
+				throw new Exception("Invalid dimension");
+		}
+
+		public void addPos(int value, int dimension)
+		{
+			if (dimension == 0)
+				x += value;
+			else if (dimension == 1)
+				y += value;
+			else
+				throw new Exception("Invalid dimension");
 		}
 
 		//public virtual void Draw(Graphics g)

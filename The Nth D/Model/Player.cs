@@ -64,23 +64,44 @@ namespace The_Nth_D
 
 			Vector2 velocityVec = Form1.velocityAndDimensionToVector(1, dimension, velocity);//If Velocity is passed in instead of 1, if velocity is negative, it'll get canceled out
 			Vector2 positionVec = new Vector2(x, y);
-			Vector2 spriteOffsetVec = Form1.velocityAndDimensionToVector(velocity, dimension, spriteSizeOnAxis);
-			Vector2 perpVector = 10 * Vector2.Normalize(Form1.positivePerpindicularVector(velocityVec));
+			Vector2 spriteOffsetVec = Form1.velocityAndDimensionToVector(velocity, dimension, spriteSizeOnAxis - 1);
+			Vector2 perpVector = Block.blockSize * Vector2.Normalize(Form1.positivePerpindicularVector(velocityVec));
 
 			positionVec +=velocityVec;//Prevent clipping issues
 
 			if (velocity > 0)
 				positionVec += spriteOffsetVec;
 			
-			for (int i = 0; i < spriteSizeOnAxis / 10; i++)
+			for (int i = 0; i < spriteSizeOnAxis / Block.blockSize; i++)
 			{
-				if (map[(int)positionVec.X / 10, (int)positionVec.Y / 10].filled == true)
+				if (map[(int)positionVec.X / Block.blockSize, (int)positionVec.Y / Block.blockSize].filled == true)
+				{
+					movePlayerToBlockEdge(velocity, dimension);//Remove redundant calls to this. Like if the player's on the ground
 					return;
+				}
 
 				positionVec += perpVector;
 			}
 
 			addVelocityVector(velocityVec);
+		}
+
+		public void movePlayerToBlockEdge(int velocity, int dimension)
+		{
+			//Set the players position to 9, or 0
+
+			int pos = (int)getEdge(velocity, dimension);//Round float to whole number
+			int lastDigit = pos % 10;
+
+			if (velocity > 0)
+			{
+				int composite = 9 - lastDigit;
+				addPos(composite, dimension);
+			}
+			else
+			{
+				addPos(-lastDigit, dimension);
+			}
 		}
 
 		public void addVelocityVector(Vector2 vector)

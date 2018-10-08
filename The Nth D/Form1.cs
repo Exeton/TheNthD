@@ -70,6 +70,9 @@ namespace The_Nth_D
 
 		private void Form1_Load(object sender, EventArgs e)
 		{
+
+			WindowState = FormWindowState.Maximized;
+
 			DoubleBuffered = true;
 
 			Bitmap playerSprite;
