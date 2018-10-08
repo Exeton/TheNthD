@@ -10,26 +10,14 @@ namespace The_Nth_D.Model
 	class EvilBox : Entity
 	{
 		Entity target;
-		float speedSquared = 1;
-		float speedValue = 1;
+		float baseSpeed = 1;
 		bool dynamicSpeed;
-		private float speed
-		{
-			get
-			{
-				return speedValue;
-			}
-			set
-			{
-				speedValue = value;
-				speedSquared = speedValue * speedValue;
-			}
-		}
+
 
 		public EvilBox(Bitmap sprite, int x, int y, Entity target, float speed, bool dynamicSpeed) : base(sprite, x, y)
 		{
 			this.target = target;
-			this.speed = speed;
+			this.baseSpeed = speed;
 			this.dynamicSpeed = dynamicSpeed;
 		}
 
@@ -41,26 +29,8 @@ namespace The_Nth_D.Model
 
 			//Solve the system of equations to get the dX and dY
 
-			float dx = target.x - x;
-			float dy = target.y - y;
-
-			float distApprox = Math.Abs(dx) + Math.Abs(dy);
-
-			if (dynamicSpeed)
-			{
-				int val = 50;
-				if (distApprox > 50)
-				{
-					speed = 5 + (float)Math.Sqrt(distApprox / 100);
-				}
-				else
-				{
-					speed = 5 - (float)Math.Sqrt((50 - distApprox / 100));
-
-					if (speed < 0)
-						speed = 0;
-				}
-			}
+			float speed = calculateSpeed();
+			float speedSquared = speed * speed;
 
 			float changeInX;
 			float changeInY;
@@ -68,16 +38,12 @@ namespace The_Nth_D.Model
 			if (target.x - x == 0)
 			{
 				changeInX = 0;
-				changeInY = speedSquared;
+				changeInY = speed;
 			}
 			else
 			{
-				float slope = dy / dx;
-
+				float slope = (target.y - y) / (target.x - x);
 				changeInX = (float)Math.Sqrt(speedSquared / (1 + slope * slope));
-
-				if (changeInX > speed - 0.01f)//Prevents taking the negative of a square root
-					changeInX = speed - 0.01f;
 
 				float insideVal = speedSquared - changeInX * changeInX;
 				if (insideVal < 0)
@@ -92,11 +58,30 @@ namespace The_Nth_D.Model
 
 			x += changeInX;
 			y += changeInY;
+		}
 
-			if (float.IsNaN(x) || float.IsNaN(y))
+		private float calculateSpeed()
+		{
+			if (!dynamicSpeed)
+				return baseSpeed;
+
+			float dx = target.x - x;
+			float dy = target.y - y;
+
+			int expectedDistance = 100;
+			float distApprox = Math.Abs(dx) + Math.Abs(dy) - expectedDistance;
+	
+			if (distApprox > 0)
+				return baseSpeed + (float)Math.Sqrt(distApprox / 100);
+			else
 			{
-				bool flat = true;
+				float value = baseSpeed - distApprox * distApprox / 100;
+
+				if (value < 0)
+					return 0;
+				return value;
 			}
+				
 		}
 
 		public override void onTick()

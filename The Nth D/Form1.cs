@@ -44,7 +44,7 @@ namespace The_Nth_D
 
 			for (float i = 10; i > 0; i--)
 			{
-				EvilBox evilBox = new EvilBox(evilBoxBitmap, 100, 100, target, i / 2, true);
+				EvilBox evilBox = new EvilBox(evilBoxBitmap, 100, 100, target, 5, true);
 				entities.Add(evilBox);
 
 				target = evilBox;
