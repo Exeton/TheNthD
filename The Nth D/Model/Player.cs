@@ -29,16 +29,23 @@ namespace The_Nth_D
 		}
 		public void handelUpInput()
 		{
-			velocityY = movementSpeed;
+			velocityY = -movementSpeed;
 		}
 		public void handelDownInput()
 		{
 			//Tie this into acceleration so that different frecquencys of input updates won't affect the fall time.
-			velocityY = -movementSpeed; 
+			velocityY = movementSpeed; 
 		}
 
-		public void handelPhysics()
+		public void handelPhysics(Block[,] map)
 		{
+
+
+			velocityY += 2;
+
+			if (velocityY > 10)
+				velocityY = 10;
+
 			if (velocityX > 0)
 				velocityX--;
 			if (velocityX < 0)
@@ -49,14 +56,52 @@ namespace The_Nth_D
 			if (velocityY < 0)
 				velocityY++;
 
-
-			x += velocityX;
-			y -= velocityY; //Changes down to negative and up to positive
+			applyXVelocity(velocityX, map);
+			applyYVelocity(velocityY, map);
 		}
 
-		public override void onTick()
+		public void applyXVelocity(int velocity, Block[,] map)
 		{
-			handelPhysics();
+			int hitboxX = (int)x;
+			if (velocity > 0)
+			{
+				hitboxX += sprite.Width;
+			}
+
+			for (int i = 0; i < sprite.Height / 10; i++)
+			{
+				int blockX = (int)(hitboxX / 10);
+				int blockY = (int)(y / 10 + i);
+
+				if (map[blockX, blockY].filled == true)
+					return;
+			}
+			x += velocity;
+		}
+
+
+		public void applyYVelocity(int velocity, Block[,] map)
+		{
+			int hitboxY = (int)y;
+			if (velocity > 0)
+			{
+				hitboxY += sprite.Height;
+			}
+
+			for (int i = 0; i < sprite.Width / 10; i++)
+			{
+				int blockX = (int)(x / 10 + i);
+				int blockY = (int)(hitboxY / 10);
+
+				if (map[blockX, blockY].filled == true)
+					return;
+			}
+			y += velocity;
+		}
+
+		public override void onTick(Block[,] map)
+		{
+			handelPhysics(map);
 		}
 	}
 }

@@ -62,7 +62,6 @@ namespace The_Nth_D.Model
 
 		private float calculateSpeed()
 		{
-
 			float dx = target.x - x;
 			float dy = target.y - y;
 
@@ -72,9 +71,6 @@ namespace The_Nth_D.Model
 
 			if (!dynamicSpeed)
 				return baseSpeed;
-
-
-
 
 			int expectedDistance = 100;
 			float distApprox = Math.Abs(dx) + Math.Abs(dy) - expectedDistance;
@@ -88,11 +84,10 @@ namespace The_Nth_D.Model
 				if (value < 0)
 					return 0;
 				return value;
-			}
-				
+			}			
 		}
 
-		public override void onTick()
+		public override void onTick(Block[,] map)
 		{
 			Move();
 		}

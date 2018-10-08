@@ -17,6 +17,9 @@ namespace The_Nth_D
 		KeysManager keyManager;
 		Player player;
 		List<Entity> entities = new List<Entity>();
+
+		Block[,] map = new Block[200,100];
+
 		public Form1()
 		{
 			InitializeComponent();
@@ -29,7 +32,7 @@ namespace The_Nth_D
 			Bitmap playerSprite;
 			//playerSprite = new Bitmap(Bitmap.FromFile(@""));
 			playerSprite = createBox(100, 100, Color.Black);
-			player = new Player(playerSprite, 100, 600);
+			player = new Player(playerSprite, 100, 200);
 			entities.Add(player);
 
 			keyManager = new KeysManager(player);
@@ -50,6 +53,19 @@ namespace The_Nth_D
 				target = evilBox;
 			}
 
+			Brush p = Brushes.Brown;
+			for (int i = 0; i < 200; i++)
+				for (int j = 0; j < 50; j++)
+				{
+					bool fill = false;
+					if (i > 100)
+						fill = true;
+
+					map[i, j] = new Block(fill, p);
+					map[i, j + 50] = new Block(true, p);
+				}
+
+
 
 			Timer gameLoop = new Timer();
 			gameLoop.Interval = 10;
@@ -65,7 +81,7 @@ namespace The_Nth_D
 
 			foreach (Entity entity in entities)
 			{
-				entity.onTick();
+				entity.onTick(map);
 			}
 		}
 
@@ -116,6 +132,16 @@ namespace The_Nth_D
 			Graphics graphics = e.Graphics;
 
 			graphics.Clear(Color.White);
+
+			for (int i = 0; i < map.GetLength(0); i++)
+				for (int j = 0; j < map.GetLength(1); j++)
+				{
+					if (map[i, j].filled)
+					{
+						graphics.FillRectangle(map[i, j].color, 10 * i, 10 * j, 10, 10);
+					}
+				}
+
 
 			foreach (Entity entity in entities)
 			{

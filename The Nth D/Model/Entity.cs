@@ -32,6 +32,6 @@ namespace The_Nth_D.Model
 		//	g.DrawImage(sprite, (int)x, (int)y);
 		//}
 
-		public abstract void onTick();
+		public abstract void onTick(Block[,] map);
 	}
 }
