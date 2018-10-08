@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller\KeysManager.cs" />
+    <Compile Include="Model\EntityWithPhysics.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

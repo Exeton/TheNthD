@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -93,10 +94,30 @@ namespace The_Nth_D.Model
 				throw new Exception("Invalid dimension");
 		}
 
-		//public virtual void Draw(Graphics g)
-		//{
-		//	g.DrawImage(sprite, (int)x, (int)y);
-		//}
+		public void movePlayerToBlockEdge(int velocity, int dimension)
+		{
+			//Set the players position to 9, or 0
+
+			int pos = (int)getEdge(velocity, dimension);//Round float to whole number
+			int lastDigit = pos % 10;
+
+			if (velocity > 0)
+			{
+				int composite = 9 - lastDigit;
+				addPos(composite, dimension);
+			}
+			else
+			{
+				addPos(-lastDigit, dimension);
+			}
+		}
+
+		public void addVelocityVector(Vector2 vector)
+		{
+			x += vector.X;
+			y += vector.Y;
+		}
+
 
 		public abstract void onTick(Map map);
 	}
