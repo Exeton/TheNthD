@@ -37,10 +37,17 @@ namespace The_Nth_D
 			Random r = new Random();
 			Bitmap evilBoxBitmap = createBox(75, 75, Color.Red);
 
-			for (int i = 1; i < 6; i++)
+			EvilBox playerTargetingBox = new EvilBox(evilBoxBitmap, 100, 100, player, 5, false);
+			entities.Add(playerTargetingBox);
+
+			Entity target = playerTargetingBox;
+
+			for (float i = 10; i > 0; i--)
 			{
-				EvilBox evilBox = new EvilBox(evilBoxBitmap, 100, 100, player, i);
+				EvilBox evilBox = new EvilBox(evilBoxBitmap, 100, 100, target, i / 2, true);
 				entities.Add(evilBox);
+
+				target = evilBox;
 			}
 
 
@@ -114,7 +121,6 @@ namespace The_Nth_D
 			{
 				entity.Draw(graphics);
 			}
-
 		}
 	}
 }

@@ -10,9 +10,10 @@ namespace The_Nth_D.Model
 	class EvilBox : Entity
 	{
 		Entity target;
-		int speedSquared = 1;
-		int speedValue = 1;
-		private int speed
+		float speedSquared = 1;
+		float speedValue = 1;
+		bool dynamicSpeed;
+		private float speed
 		{
 			get
 			{
@@ -25,10 +26,11 @@ namespace The_Nth_D.Model
 			}
 		}
 
-		public EvilBox(Bitmap sprite, int x, int y, Entity target, int speed) : base(sprite, x, y)
+		public EvilBox(Bitmap sprite, int x, int y, Entity target, float speed, bool dynamicSpeed) : base(sprite, x, y)
 		{
 			this.target = target;
 			this.speed = speed;
+			this.dynamicSpeed = dynamicSpeed;
 		}
 
 		public void Move()
@@ -38,6 +40,27 @@ namespace The_Nth_D.Model
 			//movementY / movementX = slope of a line drawn between the evil box and the target
 
 			//Solve the system of equations to get the dX and dY
+
+			float dx = target.x - x;
+			float dy = target.y - y;
+
+			float distApprox = Math.Abs(dx) + Math.Abs(dy);
+
+			if (dynamicSpeed)
+			{
+				int val = 50;
+				if (distApprox > 50)
+				{
+					speed = 5 + (float)Math.Sqrt(distApprox / 100);
+				}
+				else
+				{
+					speed = 5 - (float)Math.Sqrt((50 - distApprox / 100));
+
+					if (speed < 0)
+						speed = 0;
+				}
+			}
 
 			float changeInX;
 			float changeInY;
@@ -49,10 +72,17 @@ namespace The_Nth_D.Model
 			}
 			else
 			{
-				float slope = (target.y - y) / (target.x - x);
+				float slope = dy / dx;
 
 				changeInX = (float)Math.Sqrt(speedSquared / (1 + slope * slope));
-				changeInY = (float)Math.Sqrt(speedSquared - changeInX * changeInX);
+
+				if (changeInX > speed - 0.01f)//Prevents taking the negative of a square root
+					changeInX = speed - 0.01f;
+
+				float insideVal = speedSquared - changeInX * changeInX;
+				if (insideVal < 0)
+					insideVal = 0;
+				changeInY = (float)Math.Sqrt(insideVal);
 			}
 
 			if (x > target.x)
@@ -62,6 +92,11 @@ namespace The_Nth_D.Model
 
 			x += changeInX;
 			y += changeInY;
+
+			if (float.IsNaN(x) || float.IsNaN(y))
+			{
+				bool flat = true;
+			}
 		}
 
 		public override void onTick()

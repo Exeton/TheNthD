@@ -27,6 +27,11 @@ namespace The_Nth_D.Model
 			g.DrawImage(sprite, x, y);
 		}
 
+		//public virtual void Draw(Graphics g)
+		//{
+		//	g.DrawImage(sprite, (int)x, (int)y);
+		//}
+
 		public abstract void onTick();
 	}
 }
