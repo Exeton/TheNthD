@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -18,6 +20,7 @@ namespace The_Nth_D
 		KeysManager keyManager;
 		Player player;
 		List<Entity> entities = new List<Entity>();
+		string path = @"C:\Users\Ben\Desktop\world.dat";
 
 		public static Map map = new Map(200, 100);
 
@@ -26,14 +29,27 @@ namespace The_Nth_D
 			InitializeComponent();
 		}
 
-		public void loadMap()
+		public Map loadMap()
 		{
-
+			using (FileStream stream = File.OpenRead(path))
+			{
+				BinaryFormatter formatter = new BinaryFormatter();
+				return (Map)formatter.Deserialize(stream);
+			}
 		}
 
-		public void saveMap()
+		public void saveMap(Map map)
 		{
-			
+
+			if (File.Exists(path))
+				File.Delete(path);
+
+			using (StreamWriter sw = File.AppendText(path))
+			{
+				BinaryFormatter formatter = new BinaryFormatter();
+				formatter.Serialize(sw.BaseStream, map);
+				sw.Close();
+			}
 		}
 
 
@@ -79,6 +95,15 @@ namespace The_Nth_D
 
 		private void Form1_Load(object sender, EventArgs e)
 		{
+			if (File.Exists(path))
+			{
+				map = loadMap().onDeseralized();
+			}
+			else
+			{
+				fillMap();
+			}
+
 			WindowState = FormWindowState.Maximized;
 			DoubleBuffered = true;
 
@@ -90,21 +115,21 @@ namespace The_Nth_D
 
 			keyManager = new KeysManager(player);
 
-			Random r = new Random();
-
-			Brush p = Brushes.Brown;
-			for (int i = 0; i < 200; i++)
-				for (int j = 0; j < 100; j++)
-				{
-					bool fill = (i > 165) || (j < 2) || i < 2 || j > 90;
-					map[i, j] = new Block(fill, p);
-				}
-
 			Timer gameLoop = new Timer();
 			gameLoop.Interval = 10;
 			gameLoop.Tick += GameLoop_Tick;
 			gameLoop.Start();
+		}
 
+		public static void fillMap()
+		{
+			Color c = Color.Brown;
+			for (int i = 0; i < 200; i++)
+				for (int j = 0; j < 100; j++)
+				{
+					bool fill = (i > 165) || (j < 2) || i < 2 || j > 90;
+					map[i, j] = new Block(fill, c);
+				}
 		}
 
 		private void spawnSnake()
@@ -134,7 +159,7 @@ namespace The_Nth_D
 				int y = (Cursor.Position.Y - 18) / 10;
 
 				map[x,y].filled = true;
-				map[x, y].color = Brushes.Pink;
+				map[x, y].color = Color.Pink;
 			}
 
 			Invalidate();
@@ -166,6 +191,11 @@ namespace The_Nth_D
 
 		private void Form1_KeyDown(object sender, KeyEventArgs e)
 		{
+			if (e.KeyCode == Keys.F)
+			{
+				saveMap(map);
+			}
+
 			setKeyValue(e.KeyCode, true);
 		}
 
@@ -199,7 +229,7 @@ namespace The_Nth_D
 				{
 					if (map[i, j].filled)
 					{
-						graphics.FillRectangle(map[i, j].color, 10 * i, 10 * j, 10, 10);
+						graphics.FillRectangle(map[i, j].brush, 10 * i, 10 * j, 10, 10);
 					}
 				}
 

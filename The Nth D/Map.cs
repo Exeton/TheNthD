@@ -8,6 +8,7 @@ using The_Nth_D.Model;
 
 namespace The_Nth_D
 {
+	[Serializable]
 	public class Map
 	{
 		Block[,] map;
@@ -19,8 +20,18 @@ namespace The_Nth_D
 			for (int i = 0; i < x; i++)
 				for (int j = 0; j < y; j++)
 				{
-					map[i, j] = new Block(false, null);
+					map[i, j] = new Block(false, Color.White);
 				}
+		}
+
+		public Map onDeseralized()
+		{
+			for (int i = 0; i < GetLength(0); i++)
+				for (int j = 0; j < GetLength(1); j++)
+				{
+					map[i, j].onDeseralized();
+				}
+			return this;
 		}
 
 		public int GetLength(int dimension)
@@ -33,7 +44,7 @@ namespace The_Nth_D
 			{
 				if (insideMap(x, y))
 					return map[x, y];
-				return new Block(true, Brushes.Pink);
+				return new Block(true, Color.Pink);
 			}
 			set
 			{
