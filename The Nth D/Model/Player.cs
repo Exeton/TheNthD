@@ -11,24 +11,30 @@ namespace The_Nth_D
 {
 	class Player : EntityWithPhysics, I2DMovementController
 	{
-		public static int maxJumpTimer = 30;
+		public static int maxJumpTimer = 25;
 		int jumpTimer;
 
 
-		int movementSpeed = 10;
+		int movementSpeedCap = 10;
+		int movementSpeed = 2;
+		int verticalMovementSpeed = 10;
+
 
 		public Player(Bitmap sprite, int x, int y) : base(sprite, x, y)
 		{
 		}
 
-		public void handelLeftInput()
-		{
-			velocityX = -movementSpeed;
-		}
 		public void handelRightInput()
 		{
-			velocityX = movementSpeed;
+			//Creates movement speed cap and momentum effect
+			velocityX = Math.Min(movementSpeedCap, velocityX + movementSpeed);
 		}
+
+		public void handelLeftInput()
+		{
+			velocityX = Math.Max(-movementSpeedCap, velocityX -movementSpeed);
+		}
+
 		public void handelUpInput()
 		{
 			if (onBlock())
@@ -36,7 +42,7 @@ namespace The_Nth_D
 				jumpTimer = maxJumpTimer;
 			}
 			if (jumpTimer >= 0)
-				velocityY = -movementSpeed;
+				velocityY = -verticalMovementSpeed;
 		}
 
 		public override void onTickHook(Map map)
