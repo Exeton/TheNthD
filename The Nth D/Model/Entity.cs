@@ -73,7 +73,6 @@ namespace The_Nth_D.Model
 				return getOutsideEdge(dimension);
 		}
 
-
 		public void setPos(int value, int dimension)
 		{
 			if (dimension == 0)

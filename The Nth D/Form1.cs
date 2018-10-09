@@ -19,18 +19,28 @@ namespace The_Nth_D
 		Player player;
 		List<Entity> entities = new List<Entity>();
 
-		Map map = new Map(200, 100);
+		public static Map map = new Map(200, 100);
 
 		public Form1()
 		{
 			InitializeComponent();
 		}
 
+		public void loadMap()
+		{
+
+		}
+
+		public void saveMap()
+		{
+			
+		}
+
+
 		public static Vector2 positivePerpindicularVector(Vector2 vector2)
 		{
 			return Vector2.Abs(new Vector2(vector2.Y, vector2.X));
 		}
-
 
 		public static Vector2 velocityAndDimensionToVector(int velocity, int dimension, int val)
 		{
@@ -49,7 +59,6 @@ namespace The_Nth_D
 		{
 			return velocityAndDimensionToVector(velocity, dimension, 1);
 		}
-
 
 		public static Vector2 getUnitUp()
 		{
@@ -70,9 +79,7 @@ namespace The_Nth_D
 
 		private void Form1_Load(object sender, EventArgs e)
 		{
-
 			WindowState = FormWindowState.Maximized;
-
 			DoubleBuffered = true;
 
 			Bitmap playerSprite;
@@ -84,6 +91,24 @@ namespace The_Nth_D
 			keyManager = new KeysManager(player);
 
 			Random r = new Random();
+
+			Brush p = Brushes.Brown;
+			for (int i = 0; i < 200; i++)
+				for (int j = 0; j < 100; j++)
+				{
+					bool fill = (i > 165) || (j < 2) || i < 2 || j > 90;
+					map[i, j] = new Block(fill, p);
+				}
+
+			Timer gameLoop = new Timer();
+			gameLoop.Interval = 10;
+			gameLoop.Tick += GameLoop_Tick;
+			gameLoop.Start();
+
+		}
+
+		private void spawnSnake()
+		{
 			Bitmap evilBoxBitmap = createBox(75, 75, Color.Red);
 
 			EvilBox playerTargetingBox = new EvilBox(evilBoxBitmap, 100, 100, player, 5, false);
@@ -98,25 +123,6 @@ namespace The_Nth_D
 
 				target = evilBox;
 			}
-
-			Brush p = Brushes.Brown;
-			for (int i = 0; i < 200; i++)
-				for (int j = 0; j < 100; j++)
-				{
-					bool fill = (i > 165) || (j < 2) || i < 2 || j > 90;
-
-
-
-					map[i, j] = new Block(fill, p);
-				}
-
-
-
-			Timer gameLoop = new Timer();
-			gameLoop.Interval = 10;
-			gameLoop.Tick += GameLoop_Tick;
-			gameLoop.Start();
-
 		}
 
 		private void GameLoop_Tick(object sender, EventArgs e)

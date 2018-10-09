@@ -8,7 +8,7 @@ using The_Nth_D.Model;
 
 namespace The_Nth_D
 {
-	class Map
+	public class Map
 	{
 		Block[,] map;
 

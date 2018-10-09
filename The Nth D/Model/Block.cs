@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace The_Nth_D.Model
 {
-	class Block
+	public class Block
 	{
 		public static int blockSize = 10;
 

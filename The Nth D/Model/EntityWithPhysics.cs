@@ -22,6 +22,12 @@ namespace The_Nth_D
 		public override void onTick(Map map)
 		{
 			handelPhysics(map);
+			onTickHook(map);
+		}
+
+		public virtual void onTickHook(Map map)
+		{
+
 		}
 
 		public void handelPhysics(Map map)
@@ -35,6 +41,11 @@ namespace The_Nth_D
 			handelMovement(ref velocityY, 1, map);
 		}
 
+		public bool onBlock()
+		{
+			return willCollide(Form1.map, 1, 1, new Vector2(0, 1));
+		}
+
 		public void handelMovement(ref int velocity, int dimension, Map map)
 		{
 			applyFriction(ref velocity);
@@ -42,10 +53,18 @@ namespace The_Nth_D
 				return;
 
 			Vector2 velocityVec = Form1.velocityAndDimensionToVector(1, dimension, velocity);//If Velocity is passed in instead of 1, if velocity is negative, it'll get canceled out
-			if (willCollide(map, velocity, dimension, velocityVec))			
+			if (willCollide(map, velocity, dimension, velocityVec))
+			{
 				movePlayerToBlockEdge(velocity, dimension);//Remove redundant calls to this. Like if the player's on the ground
+				onTileCollosion(velocity, dimension);
+			}
 			else
 				addVelocityVector(velocityVec);
+		}
+
+		public virtual void onTileCollosion(int velocity, int dimension)
+		{
+			setVelocity(0, dimension);
 		}
 
 		public bool willCollide(Map map, float velocity, int dimension, Vector2 velocityVec)
@@ -75,6 +94,16 @@ namespace The_Nth_D
 				velocity -= friction;
 			if (velocity < 0)
 				velocity += friction;
+		}
+
+		public void setVelocity(int value, int dimension)
+		{
+			if (dimension == 0)
+				velocityX = value;
+			else if (dimension == 1)
+				velocityY = value;
+			else
+				throw new Exception("Invalid dimension");
 		}
 	}
 }

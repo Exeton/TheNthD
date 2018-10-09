@@ -10,7 +10,11 @@ using The_Nth_D.Model;
 namespace The_Nth_D
 {
 	class Player : EntityWithPhysics, I2DMovementController
-	{	
+	{
+		public static int maxJumpTimer = 30;
+		int jumpTimer;
+
+
 		int movementSpeed = 10;
 
 		public Player(Bitmap sprite, int x, int y) : base(sprite, x, y)
@@ -27,12 +31,29 @@ namespace The_Nth_D
 		}
 		public void handelUpInput()
 		{
-			velocityY = -movementSpeed;
+			if (onBlock())
+			{
+				jumpTimer = maxJumpTimer;
+			}
+			if (jumpTimer >= 0)
+				velocityY = -movementSpeed;
 		}
+
+		public override void onTickHook(Map map)
+		{
+			jumpTimer--;
+		}
+
 		public void handelDownInput()
 		{
 			//Tie this into acceleration so that different frecquencys of input updates won't affect the fall time.
 			velocityY = movementSpeed; 
+		}
+
+		public override void onTileCollosion(int dimension, int velocity)
+		{
+			base.onTileCollosion(dimension, velocity);
+			jumpTimer = 0;
 		}
 	}
 }
