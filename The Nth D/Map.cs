@@ -12,9 +12,11 @@ namespace The_Nth_D
 	public class Map
 	{
 		Block[,] map;
+		public string name;
 
-		public Map(int x, int y)
+		public Map(int x, int y, string name)
 		{
+			this.name = name;
 			map = new Block[x, y];
 
 			for (int i = 0; i < x; i++)

@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using The_Nth_D.Controller;
+using The_Nth_D.MapLoading;
 using The_Nth_D.Model;
 
 namespace The_Nth_D
@@ -20,38 +21,14 @@ namespace The_Nth_D
 		KeysManager keyManager;
 		Player player;
 		List<Entity> entities = new List<Entity>();
-		string path = @"C:\Users\Ben\Desktop\world.dat";
+		IMapLoader mapLoader = new FileMapLoader(Directory.GetCurrentDirectory() + @"\worlds\");
 
-		public static Map map = new Map(200, 100);
+		public static Map map = new Map(200, 100, "worldA");
 
 		public Form1()
 		{
 			InitializeComponent();
 		}
-
-		public Map loadMap()
-		{
-			using (FileStream stream = File.OpenRead(path))
-			{
-				BinaryFormatter formatter = new BinaryFormatter();
-				return (Map)formatter.Deserialize(stream);
-			}
-		}
-
-		public void saveMap(Map map)
-		{
-
-			if (File.Exists(path))
-				File.Delete(path);
-
-			using (StreamWriter sw = File.AppendText(path))
-			{
-				BinaryFormatter formatter = new BinaryFormatter();
-				formatter.Serialize(sw.BaseStream, map);
-				sw.Close();
-			}
-		}
-
 
 		public static Vector2 positivePerpindicularVector(Vector2 vector2)
 		{
@@ -95,14 +72,7 @@ namespace The_Nth_D
 
 		private void Form1_Load(object sender, EventArgs e)
 		{
-			if (File.Exists(path))
-			{
-				map = loadMap().onDeseralized();
-			}
-			else
-			{
-				fillMap();
-			}
+			loadMap();
 
 			WindowState = FormWindowState.Maximized;
 			DoubleBuffered = true;
@@ -119,6 +89,16 @@ namespace The_Nth_D
 			gameLoop.Interval = 10;
 			gameLoop.Tick += GameLoop_Tick;
 			gameLoop.Start();
+		}
+
+		private void loadMap()
+		{
+			foreach (string mapName in mapLoader.getMapNames())
+			{
+				map = mapLoader.load(mapName);
+				return;
+			}
+			fillMap();
 		}
 
 		public static void fillMap()
@@ -193,7 +173,7 @@ namespace The_Nth_D
 		{
 			if (e.KeyCode == Keys.F)
 			{
-				saveMap(map);
+				mapLoader.save(map);
 			}
 
 			setKeyValue(e.KeyCode, true);

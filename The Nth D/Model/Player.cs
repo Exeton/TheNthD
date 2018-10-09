@@ -59,7 +59,8 @@ namespace The_Nth_D
 		public override void onTileCollosion(int dimension, int velocity)
 		{
 			base.onTileCollosion(dimension, velocity);
-			jumpTimer = 0;
+			if (dimension == 1)
+				jumpTimer = 0;
 		}
 	}
 }
