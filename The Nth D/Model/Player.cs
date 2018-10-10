@@ -5,6 +5,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using The_Nth_D.Model;
 
 namespace The_Nth_D
@@ -62,7 +63,20 @@ namespace The_Nth_D
 			base.preTileCollision(velocity, dimension);
 			if (dimension == 1 && velocity < 0)
 					jumpTimer = 0;
+		}
 
+		public override void Draw(Graphics g, int screenX, int screenY)
+		{
+			base.Draw(g, screenX, screenY);
+			drawCursorBlock(g);
+		}
+
+		private void drawCursorBlock(Graphics graphics)
+		{
+			//Best way is convert to map coords then back to screen coords
+			int x = Cursor.Position.X - 5;
+			int y = Cursor.Position.Y -18;
+			graphics.FillRectangle(Brushes.Pink, x, y, Block.blockSize, Block.blockSize);
 		}
 	}
 }

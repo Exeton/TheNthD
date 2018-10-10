@@ -22,6 +22,16 @@ namespace The_Nth_D
 			this.form = form;
 		}
 
+
+		public int toWorldX(int screenX, int cameraWorldX) {
+			return screenX + (cameraWorldX - form.Width / 2);
+		}
+
+		public int toWorldY(int screenY, int cameraWorldY)
+		{
+			return screenY + (cameraWorldY - form.Height / 2);
+		}
+
 		public void drawFromCenter(Graphics graphics, int centerX, int centerY)
 		{
 			//Transform the point 1/2 a screen to the top left to be the top left.

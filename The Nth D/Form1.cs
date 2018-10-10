@@ -137,22 +137,25 @@ namespace The_Nth_D
 
 		private void GameLoop_Tick(object sender, EventArgs e)
 		{
-
-			if (MouseButtons == MouseButtons.Left)
-			{
-				int x = Cursor.Position.X / 10;
-				int y = (Cursor.Position.Y - 18) / 10;
-
-				map[x,y].filled = true;
-				map[x, y].color = Color.Pink;
-			}
-
+			placeBlocks();
 			Invalidate();
 			keyManager.handelInput();
 
 			foreach (Entity entity in entities)
 			{
 				entity.onTick(map);
+			}
+		}
+
+		private void placeBlocks()
+		{
+			if (MouseButtons == MouseButtons.Left)
+			{
+				int x = camera.toWorldX(Cursor.Position.X, (int)player.x) / 10;
+				int y = camera.toWorldY((Cursor.Position.Y - 18), (int) player.y) / 10;
+
+				map[x, y].filled = true;
+				map[x, y].color = Color.Pink;
 			}
 		}
 
