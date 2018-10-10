@@ -14,10 +14,13 @@ namespace The_Nth_D
 		Block[,] map;
 		public string name;
 
+		Block nullBlock;
+
 		public Map(int x, int y, string name)
 		{
 			this.name = name;
 			map = new Block[x, y];
+			nullBlock = new Block(true, Color.Black);
 
 			for (int i = 0; i < x; i++)
 				for (int j = 0; j < y; j++)
@@ -28,6 +31,7 @@ namespace The_Nth_D
 
 		public Map onDeseralized()
 		{
+			nullBlock = new Block(true, Color.Black);
 			for (int i = 0; i < GetLength(0); i++)
 				for (int j = 0; j < GetLength(1); j++)
 				{
@@ -46,7 +50,7 @@ namespace The_Nth_D
 			{
 				if (insideMap(x, y))
 					return map[x, y];
-				return new Block(true, Color.Black);
+				return nullBlock;
 			}
 			set
 			{
