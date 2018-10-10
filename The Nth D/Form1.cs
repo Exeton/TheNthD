@@ -24,7 +24,7 @@ namespace The_Nth_D
 		IMapLoader mapLoader = new FileMapLoader(Directory.GetCurrentDirectory() + @"\worlds\");
 
 		public static Map map = new Map(200, 100, "worldA");
-
+		Camera camera;
 		public Form1()
 		{
 			InitializeComponent();
@@ -73,6 +73,7 @@ namespace The_Nth_D
 		private void Form1_Load(object sender, EventArgs e)
 		{
 			loadMap();
+			camera = new Camera(map, entities, this);
 
 			WindowState = FormWindowState.Maximized;
 			DoubleBuffered = true;
@@ -89,13 +90,14 @@ namespace The_Nth_D
 			gameLoop.Interval = 10;
 			gameLoop.Tick += GameLoop_Tick;
 			gameLoop.Start();
+
 		}
 
 		private void loadMap()
 		{
 			foreach (string mapName in mapLoader.getMapNames())
 			{
-				map = mapLoader.load(mapName);
+				map = mapLoader.load(mapName).onDeseralized();
 				return;
 			}
 			fillMap();
@@ -200,24 +202,7 @@ namespace The_Nth_D
 
 		private void Form1_Paint(object sender, PaintEventArgs e)
 		{
-			Graphics graphics = e.Graphics;
-
-			graphics.Clear(Color.White);
-
-			for (int i = 0; i < map.GetLength(0); i++)
-				for (int j = 0; j < map.GetLength(1); j++)
-				{
-					if (map[i, j].filled)
-					{
-						graphics.FillRectangle(map[i, j].brush, 10 * i, 10 * j, 10, 10);
-					}
-				}
-
-
-			foreach (Entity entity in entities)
-			{
-				entity.Draw(graphics);
-			}
+			camera.drawFromCenter(e.Graphics, (int)player.x, (int)player.y);
 		}
 	}
 }

@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Camera.cs" />
     <Compile Include="Controller\KeysManager.cs" />
     <Compile Include="MapLoading\FileMapLoader.cs" />
     <Compile Include="MapLoading\IMapLoader.cs" />

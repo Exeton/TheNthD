@@ -46,7 +46,7 @@ namespace The_Nth_D
 			{
 				if (insideMap(x, y))
 					return map[x, y];
-				return new Block(true, Color.Pink);
+				return new Block(true, Color.Black);
 			}
 			set
 			{

@@ -23,9 +23,9 @@ namespace The_Nth_D.Model
 			this.y = y;
 		}
 
-		public virtual void Draw(Graphics g)
+		public virtual void Draw(Graphics g, int screenX, int screenY)
 		{
-			g.DrawImage(sprite, x, y);
+			g.DrawImage(sprite, screenX, screenY);
 		}
 
 		public float getOutsideEdge(int dimension)
