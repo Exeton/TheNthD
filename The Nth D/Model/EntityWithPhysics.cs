@@ -64,7 +64,14 @@ namespace The_Nth_D
 
 		public virtual void onTileCollosion(int velocity, int dimension)
 		{
+			preTileCollision(velocity, dimension);
 			setVelocity(0, dimension);
+		}
+
+		//This method is used when the knowing the original velocity of the entity is necessary
+		public virtual void preTileCollision(int velocity, int dimension)
+		{
+
 		}
 
 		public bool willCollide(Map map, float velocity, int dimension, Vector2 velocityVec)

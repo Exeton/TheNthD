@@ -56,11 +56,13 @@ namespace The_Nth_D
 			velocityY = movementSpeed; 
 		}
 
-		public override void onTileCollosion(int dimension, int velocity)
+		//This check must be run before the collision, which will set the velocity to 0
+		public override void preTileCollision(int velocity, int dimension)
 		{
-			base.onTileCollosion(dimension, velocity);
+			base.preTileCollision(velocity, dimension);
 			if (dimension == 1 && velocity < 0)
-				jumpTimer = 0;
+					jumpTimer = 0;
+
 		}
 	}
 }
