@@ -81,12 +81,7 @@ namespace The_Nth_D
 			for (int i = 0; i < spriteSizeOnAxis / Block.blockSize; i++)
 			{
 				if (map[(int)positionVec.X / Block.blockSize, (int)positionVec.Y / Block.blockSize].filled == true)
-				{
-					bool ok = false;
-					if (dimension == 1)
-						ok = true;
 					return true;
-				}
 				positionVec += perpVector;
 			}
 			return false;
