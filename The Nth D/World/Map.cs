@@ -5,14 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using The_Nth_D.Model;
+using The_Nth_D.World;
 
 namespace The_Nth_D
 {
 	[Serializable]
 	public class Map
 	{
-		Block[,] map;
+		public Block[,] map;
 		public string name;
+		public string version;
 
 		Block nullBlock;
 
@@ -27,6 +29,23 @@ namespace The_Nth_D
 				{
 					map[i, j] = new Block(false, Color.White);
 				}
+		}
+
+		public Map(Block[,] blocks, MapInfo mapInfo)
+		{
+			this.map = blocks;
+			applyMapInfo(mapInfo);
+		}
+
+		public MapInfo getMapInfo()
+		{
+			return new MapInfo(name, version);
+		}
+
+		public void applyMapInfo(MapInfo mapInfo)
+		{
+			name = mapInfo.name;
+			version = mapInfo.version;
 		}
 
 		public Map onDeseralized()

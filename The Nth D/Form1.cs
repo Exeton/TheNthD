@@ -21,7 +21,7 @@ namespace The_Nth_D
 		KeysManager keyManager;
 		Player player;
 		List<Entity> entities = new List<Entity>();
-		IMapLoader mapLoader = new FileMapLoader(Directory.GetCurrentDirectory() + @"\worlds\");
+		IMapLoader mapLoader = new CompactFileMapLoader(Directory.GetCurrentDirectory() + @"\worlds\");
 
 		public static Map map = new Map(200, 100, "worldA");
 		Camera camera;

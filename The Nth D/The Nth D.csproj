@@ -49,10 +49,12 @@
     <Compile Include="Controller\IKeyModuel.cs" />
     <Compile Include="Controller\Keybinds\NewMapKeybind.cs" />
     <Compile Include="Controller\Keybinds\SaveKeybind.cs" />
+    <Compile Include="World\MapInfo.cs" />
+    <Compile Include="World\MapLoading\CompactFileMapLoader.cs" />
     <Compile Include="View\Camera.cs" />
     <Compile Include="Controller\KeysManager.cs" />
-    <Compile Include="MapLoading\FileMapLoader.cs" />
-    <Compile Include="MapLoading\IMapLoader.cs" />
+    <Compile Include="World\MapLoading\FileMapLoader.cs" />
+    <Compile Include="World\MapLoading\IMapLoader.cs" />
     <Compile Include="Model\EntityWithPhysics.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -61,7 +63,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Controller\I2DMovementController.cs" />
-    <Compile Include="Map.cs" />
+    <Compile Include="World\Map.cs" />
     <Compile Include="Model\Block.cs" />
     <Compile Include="Model\Entity.cs" />
     <Compile Include="Model\EvilBox.cs" />
