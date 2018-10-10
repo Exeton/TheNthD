@@ -91,6 +91,9 @@ namespace The_Nth_D
 			gameLoop.Tick += GameLoop_Tick;
 			gameLoop.Start();
 
+			keyManager.registerKeybind(Keys.F, new SaveKeybind(mapLoader));
+			keyManager.registerKeybind(Keys.R, new NewMapKeybind(mapLoader, this));
+
 		}
 
 		private void loadMap()
@@ -109,7 +112,7 @@ namespace The_Nth_D
 			for (int i = 0; i < 200; i++)
 				for (int j = 0; j < 100; j++)
 				{
-					bool fill = (i > 165) || (j < 2) || i < 2 || j > 90;
+					bool fill = (i > 197) || (j < 2) || i < 2 || j > 97;
 					map[i, j] = new Block(fill, c);
 				}
 		}
@@ -168,16 +171,13 @@ namespace The_Nth_D
 
 		private void Form1_KeyUp(object sender, KeyEventArgs e)
 		{
+			keyManager.onKeyUp(e.KeyCode);
 			setKeyValue(e.KeyCode, false);
 		}
 
 		private void Form1_KeyDown(object sender, KeyEventArgs e)
 		{
-			if (e.KeyCode == Keys.F)
-			{
-				mapLoader.save(map);
-			}
-
+			keyManager.onKeyDown(e.KeyCode);
 			setKeyValue(e.KeyCode, true);
 		}
 
