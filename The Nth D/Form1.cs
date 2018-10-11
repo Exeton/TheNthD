@@ -23,10 +23,15 @@ namespace The_Nth_D
 		Player player;
 		List<Entity> entities = new List<Entity>();
 		IMapLoader mapLoader = new CompactFileMapLoader(Directory.GetCurrentDirectory() + @"\worlds\");
+		Timer gameLoop;
 
 		public static Map map = new Map(400, 200, "worldA");
 		Camera camera;
 		ArrayMapCacher mapCacher;
+
+		public static int fps = 50;
+		private int ms = 0;
+
 		public Form1()
 		{
 			InitializeComponent();
@@ -90,10 +95,12 @@ namespace The_Nth_D
 
 			keyManager = new KeysManager(player);
 
-			Timer gameLoop = new Timer();
+			gameLoop = new Timer();
 			gameLoop.Interval = 10;
 			gameLoop.Tick += GameLoop_Tick;
 			gameLoop.Start();
+
+
 
 			keyManager.registerKeybind(Keys.F, new SaveKeybind(mapLoader));
 			keyManager.registerKeybind(Keys.R, new NewMapKeybind(mapLoader, this));
@@ -142,8 +149,15 @@ namespace The_Nth_D
 		private void GameLoop_Tick(object sender, EventArgs e)
 		{
 			placeBlocks();
-			Invalidate();
 			keyManager.handelInput();
+
+			ms += gameLoop.Interval;
+			int frameDelay = 1000 / fps;
+			if (ms > frameDelay)
+			{
+				Invalidate();
+				ms -= frameDelay;
+			}
 
 			foreach (Entity entity in entities)
 			{

@@ -40,7 +40,8 @@ namespace The_Nth_D.View.MapCaching
 			if (x < 0 || y < 0 || x >= cache.GetLength(0) || y >= cache.GetLength(1))
 				return;
 
-			cache[x, y].Dispose();
+			if (cache[x,y] != null)
+				cache[x, y].Dispose();
 			cache[x, y] = null;//Do bounds check
 		}
 
