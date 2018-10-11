@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using The_Nth_D.Model;
+using The_Nth_D.View;
+using The_Nth_D.View.MapCaching;
 
 namespace The_Nth_D
 {
@@ -13,13 +17,17 @@ namespace The_Nth_D
 		Map map;
 		List<Entity> entities;
 		Form1 form;
+		ArrayMapCacher arrayMapCacher;
 
+		Stopwatch diagonsiticTimer = new Stopwatch();
+		int drawnFrames = 0;
 
 		public Camera(Map map, List<Entity> entities, Form1 form)
 		{
 			this.map = map;
 			this.entities = entities;
 			this.form = form;
+			arrayMapCacher = new ArrayMapCacher(map.GetLength(0), map.GetLength(1), map);
 		}
 
 
@@ -41,8 +49,8 @@ namespace The_Nth_D
 		public void draw(Graphics graphics, int left, int top)
 		{
 			graphics.Clear(Color.White);
-			drawMap(graphics, left, top);
-
+			drawMap2(graphics, left, top);
+			
 			foreach (Entity entity in entities)
 			{
 				int screenX = (int)entity.x - left;
@@ -69,6 +77,38 @@ namespace The_Nth_D
 						graphics.FillRectangle(map[i, j].brush, blockSize * (i - xOffset), blockSize * (j - yOffset), blockSize, blockSize);
 					}
 				}
+		}
+
+		public void drawMap2(Graphics graphics, int left, int top)
+		{
+			int blockSize = Block.blockSize;
+
+			int regionWidthInPixels = MapCacher.regionWidthInBlocks * blockSize;
+			int regionHeightInPixels = MapCacher.regionHeightInBlocks * blockSize;
+
+			int xOffset = left / regionWidthInPixels;
+			int yOffset = top / regionHeightInPixels;
+
+			int screenRegionWidth = form.Width / regionWidthInPixels;
+			int screenRegionHeight = form.Height / regionHeightInPixels;
+
+			int remX = left % regionWidthInPixels;
+			int remY = top % regionHeightInPixels;
+
+			int drawnMaps = 0;
+
+			for (int i = xOffset; i < screenRegionWidth + xOffset + 2; i++)
+				for (int j = yOffset; j < screenRegionHeight + yOffset + 2; j++)
+				{ 
+					Bitmap mapSection = arrayMapCacher.getCachedRegion(i, j);
+
+					int xPos = regionWidthInPixels * (i - xOffset) - remX;
+					int yPos = regionHeightInPixels * (j - yOffset) - remY;
+					graphics.DrawImage(mapSection, xPos, yPos);
+					drawnMaps++;
+				}
+
+			int k = drawnMaps;
 		}
 	}
 }

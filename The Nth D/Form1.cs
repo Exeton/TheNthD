@@ -23,7 +23,7 @@ namespace The_Nth_D
 		List<Entity> entities = new List<Entity>();
 		IMapLoader mapLoader = new CompactFileMapLoader(Directory.GetCurrentDirectory() + @"\worlds\");
 
-		public static Map map = new Map(200, 100, "worldA");
+		public static Map map = new Map(400, 200, "worldA");
 		Camera camera;
 		public Form1()
 		{
@@ -81,7 +81,7 @@ namespace The_Nth_D
 			Bitmap playerSprite;
 			//playerSprite = new Bitmap(Bitmap.FromFile(@""));
 			playerSprite = createBox(100, 100, Color.Black);
-			player = new Player(playerSprite, 100, 200);
+			player = new Player(playerSprite, 60, 200);
 			entities.Add(player);
 
 			keyManager = new KeysManager(player);
@@ -109,10 +109,10 @@ namespace The_Nth_D
 		public static void fillMap()
 		{
 			Color c = Color.Brown;
-			for (int i = 0; i < 200; i++)
-				for (int j = 0; j < 100; j++)
+			for (int i = 0; i < 400; i++)
+				for (int j = 0; j < 200; j++)
 				{
-					bool fill = (i > 197) || (j < 2) || i < 2 || j > 97;
+					bool fill = (i > 397) || (j < 2) || i < 2 || j > 197;
 					map[i, j] = new Block(fill, c);
 				}
 		}

@@ -49,6 +49,8 @@
     <Compile Include="Controller\IKeyModuel.cs" />
     <Compile Include="Controller\Keybinds\NewMapKeybind.cs" />
     <Compile Include="Controller\Keybinds\SaveKeybind.cs" />
+    <Compile Include="View\MapCaching\ArrayMapCacher.cs" />
+    <Compile Include="View\MapCaching\MapCacher.cs" />
     <Compile Include="World\MapInfo.cs" />
     <Compile Include="World\MapLoading\CompactFileMapLoader.cs" />
     <Compile Include="View\Camera.cs" />
