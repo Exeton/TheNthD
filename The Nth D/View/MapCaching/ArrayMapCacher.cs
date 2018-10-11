@@ -33,6 +33,15 @@ namespace The_Nth_D.View.MapCaching
 			cache[regionX, regionY] = regionBlocks;
 		}
 
+		public void invalidateRegion(int blockX, int blockY)
+		{
+			int x = blockX / regionWidthInBlocks;
+			int y = blockY / regionHeightInBlocks;
+			if (x < 0 || y < 0 || x >= cache.GetLength(0) || y >= cache.GetLength(1))
+				return;
+			cache[x, y] = null;//Do bounds check
+		}
+
 		//Negative region coords can round to zero when converted to region coords creating a white screen on the top and left of the world
 		public override Bitmap getCachedRegion(int regionX, int regionY)
 		{

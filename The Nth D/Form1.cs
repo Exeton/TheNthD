@@ -13,6 +13,7 @@ using System.Windows.Forms;
 using The_Nth_D.Controller;
 using The_Nth_D.MapLoading;
 using The_Nth_D.Model;
+using The_Nth_D.View.MapCaching;
 
 namespace The_Nth_D
 {
@@ -25,6 +26,7 @@ namespace The_Nth_D
 
 		public static Map map = new Map(400, 200, "worldA");
 		Camera camera;
+		ArrayMapCacher mapCacher;
 		public Form1()
 		{
 			InitializeComponent();
@@ -72,8 +74,10 @@ namespace The_Nth_D
 
 		private void Form1_Load(object sender, EventArgs e)
 		{
+
 			loadMap();
-			camera = new Camera(map, entities, this);
+			mapCacher = new ArrayMapCacher(map.GetLength(0), map.GetLength(1), map);
+			camera = new Camera(map, entities, this, mapCacher);
 
 			WindowState = FormWindowState.Maximized;
 			DoubleBuffered = true;
@@ -156,6 +160,9 @@ namespace The_Nth_D
 
 				map[x, y].filled = true;
 				map[x, y].color = Color.Pink;
+
+				mapCacher.invalidateRegion(x, y);
+
 			}
 		}
 

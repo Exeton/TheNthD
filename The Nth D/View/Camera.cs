@@ -22,12 +22,12 @@ namespace The_Nth_D
 		Stopwatch diagonsiticTimer = new Stopwatch();
 		int drawnFrames = 0;
 
-		public Camera(Map map, List<Entity> entities, Form1 form)
+		public Camera(Map map, List<Entity> entities, Form1 form, ArrayMapCacher arrayMapCacher)
 		{
 			this.map = map;
 			this.entities = entities;
 			this.form = form;
-			arrayMapCacher = new ArrayMapCacher(map.GetLength(0), map.GetLength(1), map);
+			this.arrayMapCacher = arrayMapCacher;
 		}
 
 
