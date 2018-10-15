@@ -48,7 +48,7 @@ namespace The_Nth_D
 
 		public void draw(Graphics graphics, int left, int top)
 		{
-			runMapDrawTest(graphics, left, top);
+			//runMapDrawTest(graphics, left, top);
 			drawMap2(graphics, left, top);
 			
 			foreach (Entity entity in entities)
@@ -102,8 +102,8 @@ namespace The_Nth_D
 			int regionWidthInPixels = MapCacher.regionWidthInBlocks * blockSize;
 			int regionHeightInPixels = MapCacher.regionHeightInBlocks * blockSize;
 
-			int xOffset = left / regionWidthInPixels;
-			int yOffset = top / regionHeightInPixels;
+			int xOffset = toRegionCoord(left, regionWidthInPixels);
+			int yOffset = toRegionCoord(top, regionHeightInPixels);
 
 			int screenRegionWidth = form.Width / regionWidthInPixels;
 			int screenRegionHeight = form.Height / regionHeightInPixels;
@@ -113,16 +113,23 @@ namespace The_Nth_D
 
 			int drawnMaps = 0;
 
-			for (int i = xOffset; i < screenRegionWidth + xOffset + 2; i++)
-				for (int j = yOffset; j < screenRegionHeight + yOffset + 2; j++)
+			for (int i = 0; i < screenRegionWidth + 2; i++)
+				for (int j = 0; j < screenRegionHeight + 2; j++)
 				{
-					int xPos = regionWidthInPixels * (i - xOffset) - remX;
-					int yPos = regionHeightInPixels * (j - yOffset) - remY;
+					int xPos = regionWidthInPixels * i - remX;
+					if (remX < 0)
+						xPos -= regionWidthInPixels;
+
+					int yPos = regionHeightInPixels * j - remY;
+					if (remY < 0)
+						yPos -= regionHeightInPixels;
+
+
 
 					if (xPos > form.Width || yPos > form.Height)
 						continue;//Although system graphics likely already preforms culling, this prevents excess calls to mapCacher.getCachedRegion()
 
-					Bitmap mapSection = arrayMapCacher.getCachedRegion(i, j);
+					Bitmap mapSection = arrayMapCacher.getCachedRegion(i + xOffset, j + yOffset);
 
 
 					graphics.DrawImage(mapSection, xPos, yPos);
@@ -130,6 +137,17 @@ namespace The_Nth_D
 				}
 
 			int k = drawnMaps;
+		}
+
+		//This method makes it so negative screenCoords don't round towards 0
+		public int toRegionCoord(int screenCoord, int regionWidthInPixels)
+		{
+			if (screenCoord >= 0)
+				return screenCoord / regionWidthInPixels;
+			else if (screenCoord % regionWidthInPixels == 0)//Rounding will not occur if the screenCoord is a - multiple of the regionWidth
+				return screenCoord / regionWidthInPixels;
+			else
+				return (screenCoord / regionWidthInPixels) - 1;
 		}
 	}
 }
