@@ -48,8 +48,7 @@ namespace The_Nth_D
 
 		public void draw(Graphics graphics, int left, int top)
 		{
-			//runMapDrawTest(graphics, left, top);
-			graphics.Clear(Color.White);
+			runMapDrawTest(graphics, left, top);
 			drawMap2(graphics, left, top);
 			
 			foreach (Entity entity in entities)
@@ -121,7 +120,7 @@ namespace The_Nth_D
 					int yPos = regionHeightInPixels * (j - yOffset) - remY;
 
 					if (xPos > form.Width || yPos > form.Height)
-						continue;
+						continue;//Although system graphics likely already preforms culling, this prevents excess calls to mapCacher.getCachedRegion()
 
 					Bitmap mapSection = arrayMapCacher.getCachedRegion(i, j);
 
