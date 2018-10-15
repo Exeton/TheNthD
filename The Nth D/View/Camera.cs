@@ -20,7 +20,6 @@ namespace The_Nth_D
 		ArrayMapCacher arrayMapCacher;
 
 		Stopwatch diagonsiticTimer = new Stopwatch();
-		int drawnFrames = 0;
 
 		public Camera(Map map, List<Entity> entities, Form1 form, ArrayMapCacher arrayMapCacher)
 		{
@@ -29,7 +28,6 @@ namespace The_Nth_D
 			this.form = form;
 			this.arrayMapCacher = arrayMapCacher;
 		}
-
 
 		public int toWorldX(int screenX, int cameraWorldX) {
 			return screenX + (cameraWorldX - form.Width / 2);
@@ -49,7 +47,7 @@ namespace The_Nth_D
 		public void draw(Graphics graphics, int left, int top)
 		{
 			//runMapDrawTest(graphics, left, top);
-			drawMap2(graphics, left, top);
+			drawMap(graphics, left, top);
 			
 			foreach (Entity entity in entities)
 			{
@@ -72,30 +70,9 @@ namespace The_Nth_D
 			stopwatch.Stop();
 			long elasped = stopwatch.ElapsedMilliseconds;
 			int breakpoint = 0;
-
 		}
 
 		public void drawMap(Graphics graphics, int left, int top)
-		{
-			int blockSize = Block.blockSize;
-
-			int xOffset = left / blockSize;
-			int yOffset = top / blockSize;
-
-			int screenBlockWidth = form.Width / blockSize;
-			int screenBlockHeight = form.Height / blockSize;
-
-			for (int i = xOffset; i < screenBlockWidth + xOffset; i++)
-				for (int j = yOffset; j < screenBlockHeight + yOffset; j++)
-				{
-					if (map[i, j].filled)
-					{
-						graphics.FillRectangle(map[i, j].brush, blockSize * (i - xOffset), blockSize * (j - yOffset), blockSize, blockSize);
-					}
-				}
-		}
-
-		public void drawMap2(Graphics graphics, int left, int top)
 		{
 			int blockSize = Block.blockSize;
 
@@ -124,18 +101,13 @@ namespace The_Nth_D
 					if (remY < 0)
 						yPos -= regionHeightInPixels;
 
-
-
 					if (xPos > form.Width || yPos > form.Height)
 						continue;//Although system graphics likely already preforms culling, this prevents excess calls to mapCacher.getCachedRegion()
 
 					Bitmap mapSection = arrayMapCacher.getCachedRegion(i + xOffset, j + yOffset);
-
-
 					graphics.DrawImage(mapSection, xPos, yPos);
 					drawnMaps++;
 				}
-
 			int k = drawnMaps;
 		}
 
