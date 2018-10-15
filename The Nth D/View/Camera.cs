@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using The_Nth_D.Model;
 using The_Nth_D.View;
 using The_Nth_D.View.MapCaching;
@@ -64,7 +60,7 @@ namespace The_Nth_D
 
 			for (int i = 0; i < 10000; i++)
 			{
-				drawMap2(graphics, left, top);
+				drawMap(graphics, left, top);
 			}
 
 			stopwatch.Stop();
