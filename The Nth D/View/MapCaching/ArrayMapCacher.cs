@@ -24,7 +24,7 @@ namespace The_Nth_D.View.MapCaching
 			
 			using (Graphics grapics = Graphics.FromImage(outsideMap))
 			{
-				grapics.Clear(Color.Black);
+				grapics.Clear(Color.Orange);
 			}
 		}
 

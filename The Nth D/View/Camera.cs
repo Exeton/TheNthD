@@ -48,6 +48,7 @@ namespace The_Nth_D
 
 		public void draw(Graphics graphics, int left, int top)
 		{
+			//runMapDrawTest(graphics, left, top);
 			graphics.Clear(Color.White);
 			drawMap2(graphics, left, top);
 			
@@ -57,6 +58,22 @@ namespace The_Nth_D
 				int screenY = (int)entity.y - top;
 				entity.Draw(graphics, screenX, screenY);
 			}
+		}
+
+		private void runMapDrawTest(Graphics graphics, int left, int top)
+		{
+			Stopwatch stopwatch = new Stopwatch();
+			stopwatch.Start();
+
+			for (int i = 0; i < 10000; i++)
+			{
+				drawMap2(graphics, left, top);
+			}
+
+			stopwatch.Stop();
+			long elasped = stopwatch.ElapsedMilliseconds;
+			int breakpoint = 0;
+
 		}
 
 		public void drawMap(Graphics graphics, int left, int top)
@@ -99,11 +116,16 @@ namespace The_Nth_D
 
 			for (int i = xOffset; i < screenRegionWidth + xOffset + 2; i++)
 				for (int j = yOffset; j < screenRegionHeight + yOffset + 2; j++)
-				{ 
-					Bitmap mapSection = arrayMapCacher.getCachedRegion(i, j);
-
+				{
 					int xPos = regionWidthInPixels * (i - xOffset) - remX;
 					int yPos = regionHeightInPixels * (j - yOffset) - remY;
+
+					if (xPos > form.Width || yPos > form.Height)
+						continue;
+
+					Bitmap mapSection = arrayMapCacher.getCachedRegion(i, j);
+
+
 					graphics.DrawImage(mapSection, xPos, yPos);
 					drawnMaps++;
 				}

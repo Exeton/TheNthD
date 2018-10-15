@@ -9,8 +9,8 @@ namespace The_Nth_D.View
 {
 	abstract class MapCacher
 	{
-		public static int regionWidthInBlocks = 200;
-		public static int regionHeightInBlocks = 200;
+		public static int regionWidthInBlocks = 100;
+		public static int regionHeightInBlocks = 50;
 
 		public abstract Bitmap getCachedRegion(int regionX, int regionY);
 
