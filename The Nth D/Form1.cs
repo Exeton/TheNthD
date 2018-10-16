@@ -149,6 +149,7 @@ namespace The_Nth_D
 			int frameDelay = 1000 / fps;
 			if (ms > frameDelay)
 			{
+				
 				Invalidate();
 				ms -= frameDelay;
 			}

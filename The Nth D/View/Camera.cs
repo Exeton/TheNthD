@@ -40,8 +40,15 @@ namespace The_Nth_D
 			draw(graphics, centerX - form.Width / 2, centerY - form.Height / 2);
 		}
 
-		public void draw(Graphics graphics, int left, int top)
+		public void draw(Graphics screenGraphics, int left, int top)
 		{
+			drawBitmap(screenGraphics, left, top);
+			return;
+			//Currently on hold until I can profile and compare this to the bitmap method
+			BufferedGraphicsContext graphicsContext = BufferedGraphicsManager.Current;
+			BufferedGraphics bufferedGraphics = graphicsContext.Allocate(screenGraphics, form.DisplayRectangle);
+			Graphics graphics = bufferedGraphics.Graphics;
+			graphics.Clear(Color.White);
 			//runMapDrawTest(graphics, left, top);
 			drawMap(graphics, left, top);
 			
@@ -51,6 +58,32 @@ namespace The_Nth_D
 				int screenY = (int)entity.y - top;
 				entity.Draw(graphics, screenX, screenY);
 			}
+
+			bufferedGraphics.Render();
+			bufferedGraphics.Dispose();
+		}
+
+		public void drawBitmap(Graphics screenGraphics, int left, int top)
+		{
+
+			Bitmap buffer = new Bitmap(form.Width, form.Height);
+			Graphics graphics = Graphics.FromImage(buffer);
+
+			graphics.Clear(Color.White);
+			//runMapDrawTest(graphics, left, top);
+			drawMap(graphics, left, top);
+
+			foreach (Entity entity in entities)
+			{
+				int screenX = (int)entity.x - left;
+				int screenY = (int)entity.y - top;
+				entity.Draw(graphics, screenX, screenY);
+			}
+
+			screenGraphics.DrawImage(buffer, 0, 0);
+
+			graphics.Dispose();
+			buffer.Dispose();
 		}
 
 		private void runMapDrawTest(Graphics graphics, int left, int top)
