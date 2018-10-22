@@ -1,6 +1,6 @@
 # TheNthD
 
-##Updated project
+## Updated project
 This project has been moved to a new repo, as it was moved from WinForms to MonoGame. This means MonoGame deals with the drawing code, which will likely preform better than me trying to write my own optimized drawing algorthims.
 
 The new repo can be found at: https://github.com/Exeton/ANewWorld
